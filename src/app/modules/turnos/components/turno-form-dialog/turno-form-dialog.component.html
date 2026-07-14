@@ -1,0 +1,75 @@
+<h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+  {{ esEdicion ? 'Editar turno' : 'Nuevo turno' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Paciente</mat-label>
+      <mat-select formControlName="pacienteId">
+        <mat-option *ngFor="let paciente of pacientes()" [value]="paciente.id">
+          {{ paciente.nombre }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.controls.pacienteId.hasError('required')">Seleccioná un paciente.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Motivo</mat-label>
+      <input matInput formControlName="motivo" placeholder="Ej: Control de ortodoncia" maxlength="80" />
+      <mat-error *ngIf="form.controls.motivo.hasError('required')">El motivo es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.motivo.hasError('minlength')">Ingresá al menos 3 caracteres.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="form.controls.fecha.hasError('required')">La fecha es obligatoria.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Hora</mat-label>
+      <input matInput type="time" formControlName="hora" />
+      <mat-error *ngIf="form.controls.hora.hasError('required')">La hora es obligatoria.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Duración</mat-label>
+      <mat-select formControlName="duracionMinutos">
+        <mat-option *ngFor="let duracion of duraciones" [value]="duracion">{{ duracion }} minutos</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Profesional</mat-label>
+      <mat-select formControlName="profesional">
+        <mat-option *ngFor="let profesional of profesionales" [value]="profesional">{{ profesional }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.controls.profesional.hasError('required')">Seleccioná un profesional.</mat-error>
+    </mat-form-field>
+
+    <!-- El estado solo se edita en turnos existentes; uno nuevo siempre nace "Pendiente". -->
+    <mat-form-field *ngIf="esEdicion" appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let entrada of estadosDisponibles" [value]="entrada[0]">
+          {{ entrada[1].label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Notas (opcional)</mat-label>
+      <textarea matInput formControlName="notas" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="guardar()">
+    {{ esEdicion ? 'Guardar cambios' : 'Crear turno' }}
+  </button>
+</mat-dialog-actions>

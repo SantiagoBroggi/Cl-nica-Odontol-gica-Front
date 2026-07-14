@@ -1,0 +1,18 @@
+<div class="app-card flex flex-col gap-4 p-5">
+  <div class="flex items-center justify-between">
+    <span class="text-sm font-medium text-slate-500">{{ kpi.etiqueta }}</span>
+    <div class="flex h-10 w-10 items-center justify-center rounded-xl" [class]="claseIcono">
+      <span class="material-symbols-outlined text-[20px]">{{ kpi.icono }}</span>
+    </div>
+  </div>
+
+  <div class="flex items-end justify-between">
+    <p class="text-2xl font-semibold text-slate-800">{{ kpi.valor }}</p>
+    <div class="flex items-center gap-1 text-xs font-medium" [class.text-emerald-600]="esPositiva" [class.text-rose-600]="!esPositiva">
+      <span class="material-symbols-outlined text-[16px]">{{ esPositiva ? 'trending_up' : 'trending_down' }}</span>
+      <span>{{ esPositiva ? '+' : '' }}{{ kpi.variacion }}%</span>
+    </div>
+  </div>
+
+  <p class="text-xs text-slate-400">{{ kpi.variacionLabel }}</p>
+</div>

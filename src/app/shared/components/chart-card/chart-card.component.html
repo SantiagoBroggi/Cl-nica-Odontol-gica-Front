@@ -1,0 +1,8 @@
+<div class="app-card flex h-full flex-col gap-1 p-5">
+  <h3 class="text-sm font-semibold text-slate-800">{{ config.titulo }}</h3>
+  <p *ngIf="config.subtitulo" class="text-xs text-slate-400">{{ config.subtitulo }}</p>
+
+  <div class="mt-2" [style.height.px]="alto">
+    <canvas #canvasRef></canvas>
+  </div>
+</div>

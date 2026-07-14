@@ -1,0 +1,114 @@
+<div class="flex flex-col gap-6">
+  <!-- Encabezado -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-xl font-semibold text-slate-800">Pacientes</h1>
+      <p class="text-sm text-slate-500">{{ totalPacientes() }} pacientes registrados en el consultorio.</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="abrirNuevoPaciente()" class="!flex !items-center !gap-2">
+      <span class="material-symbols-outlined text-[18px]">person_add</span>
+      Nuevo paciente
+    </button>
+  </div>
+
+  <!-- Barra de búsqueda y filtros -->
+  <div class="app-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
+    <mat-form-field appearance="outline" class="w-full sm:max-w-sm" subscriptSizing="dynamic">
+      <mat-label>Buscar por nombre, DNI o teléfono</mat-label>
+      <input matInput (input)="onBuscar($any($event.target).value)" placeholder="Ej: Martina Gómez" />
+      <span matPrefix class="material-symbols-outlined mr-2 text-[18px] text-slate-400">search</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:w-64" subscriptSizing="dynamic">
+      <mat-label>Filtrar por turno</mat-label>
+      <mat-select value="todos" (selectionChange)="onFiltroChange($event.value)">
+        <mat-option value="todos">Todos los pacientes</mat-option>
+        <mat-option value="con-proximo-turno">Con próximo turno</mat-option>
+        <mat-option value="sin-proximo-turno">Sin próximo turno</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Tabla -->
+  <div class="app-card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[860px] text-left text-sm">
+        <thead>
+          <tr class="border-b border-surface-border bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <th class="px-5 py-3">Paciente</th>
+            <th class="px-5 py-3">DNI</th>
+            <th class="px-5 py-3">Teléfono</th>
+            <th class="px-5 py-3">Edad</th>
+            <th class="px-5 py-3">Última consulta</th>
+            <th class="px-5 py-3">Próximo turno</th>
+            <th class="px-5 py-3 text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border">
+          <tr *ngFor="let paciente of pacientesPagina()" class="hover:bg-slate-50">
+            <td class="px-5 py-3">
+              <div class="flex items-center gap-3">
+                <app-avatar-iniciales [iniciales]="iniciales(paciente)" [semilla]="paciente.id" [tamano]="36" />
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-slate-800">{{ nombreCompleto(paciente) }}</p>
+                  <p class="truncate text-xs text-slate-500">{{ paciente.obraSocial || 'Particular' }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 text-slate-600">{{ paciente.dni }}</td>
+            <td class="px-5 py-3 text-slate-600">{{ paciente.telefono }}</td>
+            <td class="px-5 py-3 text-slate-600">{{ calcularEdad(paciente.fechaNacimiento) }} años</td>
+            <td class="px-5 py-3 text-slate-600">
+              {{ paciente.ultimaConsulta ? (paciente.ultimaConsulta | date: 'dd/MM/yyyy') : '—' }}
+            </td>
+            <td class="px-5 py-3">
+              <span
+                *ngIf="paciente.proximoTurno; else sinTurno"
+                class="inline-flex items-center rounded-full bg-brand-100 px-2.5 py-1 text-xs font-medium text-brand-700"
+              >
+                {{ paciente.proximoTurno | date: 'dd/MM/yyyy HH:mm' }}
+              </span>
+              <ng-template #sinTurno>
+                <span class="text-xs text-slate-400">Sin turno agendado</span>
+              </ng-template>
+            </td>
+            <td class="px-5 py-3">
+              <div class="flex items-center justify-end gap-1">
+                <button
+                  mat-icon-button
+                  matTooltip="Editar paciente"
+                  (click)="abrirEditarPaciente(paciente)"
+                  aria-label="Editar paciente"
+                >
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">edit</span>
+                </button>
+                <button
+                  mat-icon-button
+                  matTooltip="Eliminar paciente"
+                  (click)="confirmarEliminar(paciente)"
+                  aria-label="Eliminar paciente"
+                >
+                  <span class="material-symbols-outlined text-[20px] text-rose-500">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="pacientesPagina().length === 0">
+            <td colspan="7" class="px-5 py-12 text-center text-sm text-slate-400">
+              No se encontraron pacientes con los filtros aplicados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="pacientesFiltrados().length"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 25]"
+      (page)="onPageChange($event)"
+      class="border-t border-surface-border"
+    ></mat-paginator>
+  </div>
+</div>

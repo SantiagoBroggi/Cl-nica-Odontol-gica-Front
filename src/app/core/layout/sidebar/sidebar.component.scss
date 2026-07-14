@@ -1,0 +1,12 @@
+// La clase 'nav-link-active' la agrega Angular (routerLinkActive) sobre el
+// <a>, no sobre un contenedor padre. Se resuelve acá en SCSS en lugar de
+// forzar un selector de grupo arbitrario de Tailwind, que es más frágil
+// de mantener para este caso puntual.
+.nav-link-active {
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+
+  .nav-link__icon {
+    color: #ffffff;
+  }
+}

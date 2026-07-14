@@ -1,0 +1,22 @@
+<div class="app-card flex h-full flex-col p-5">
+  <div class="mb-3 flex items-center justify-between">
+    <h3 class="text-sm font-semibold text-slate-800">Pacientes recientes</h3>
+    <a routerLink="/pacientes" class="text-xs font-medium text-brand-600 hover:underline">Ver todos</a>
+  </div>
+
+  <ul class="flex flex-col divide-y divide-surface-border">
+    <li *ngFor="let paciente of pacientes" class="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+      <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700">
+        {{ paciente.iniciales }}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-medium text-slate-800">{{ paciente.nombreCompleto }}</p>
+        <p class="truncate text-xs text-slate-500">{{ paciente.tratamientoActivo }}</p>
+      </div>
+      <span class="shrink-0 text-xs text-slate-400">{{ paciente.ultimaConsulta | tiempoRelativo }}</span>
+    </li>
+    <li *ngIf="pacientes.length === 0" class="py-6 text-center text-sm text-slate-400">
+      Todavía no hay pacientes registrados.
+    </li>
+  </ul>
+</div>

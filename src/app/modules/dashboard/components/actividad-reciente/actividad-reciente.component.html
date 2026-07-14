@@ -1,0 +1,19 @@
+<div class="app-card flex h-full flex-col p-5">
+  <h3 class="mb-3 text-sm font-semibold text-slate-800">Actividad reciente</h3>
+
+  <ul class="flex flex-col">
+    <li *ngFor="let actividad of actividades; let last = last" class="relative flex gap-3 pb-5 last:pb-0">
+      <span *ngIf="!last" class="absolute left-[15px] top-8 h-[calc(100%-1.5rem)] w-px bg-surface-border"></span>
+      <div class="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+        <span class="material-symbols-outlined text-[16px]">{{ actividad.icono }}</span>
+      </div>
+      <div class="min-w-0 flex-1 pt-0.5">
+        <p class="text-sm text-slate-700">{{ actividad.descripcion }}</p>
+        <p class="mt-0.5 text-xs text-slate-400">{{ actividad.autor }} · {{ actividad.fecha | tiempoRelativo }}</p>
+      </div>
+    </li>
+    <li *ngIf="actividades.length === 0" class="py-6 text-center text-sm text-slate-400">
+      Sin actividad reciente.
+    </li>
+  </ul>
+</div>

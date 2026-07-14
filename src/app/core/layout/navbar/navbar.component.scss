@@ -1,0 +1,7 @@
+// La mayor parte del layout se resuelve con utilidades de Tailwind en el
+// template. Este archivo queda para ajustes finos específicos de Material
+// (por ejemplo, alinear íconos dentro de mat-menu-item) que no conviene
+// resolver con clases utilitarias globales.
+:host ::ng-deep .mat-mdc-menu-item .material-symbols-outlined {
+  vertical-align: middle;
+}

@@ -1,0 +1,72 @@
+<h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+  {{ esEdicion ? 'Editar paciente' : 'Nuevo paciente' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="60" />
+      <mat-error *ngIf="form.controls.nombre.hasError('required')">El nombre es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.nombre.hasError('minlength')">Ingresá al menos 2 caracteres.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Apellido</mat-label>
+      <input matInput formControlName="apellido" maxlength="60" />
+      <mat-error *ngIf="form.controls.apellido.hasError('required')">El apellido es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.apellido.hasError('minlength')">Ingresá al menos 2 caracteres.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>DNI</mat-label>
+      <input matInput formControlName="dni" maxlength="8" placeholder="Sin puntos" />
+      <mat-error *ngIf="form.controls.dni.hasError('required')">El DNI es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.dni.hasError('dniInvalido')">Ingresá un DNI válido (7 u 8 dígitos).</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" placeholder="+54 351 555-0100" />
+      <mat-error *ngIf="form.controls.telefono.hasError('required')">El teléfono es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.telefono.hasError('telefonoInvalido')">Ingresá un teléfono válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Email (opcional)</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="paciente&#64;email.com" />
+      <mat-error *ngIf="form.controls.email.hasError('email')">Ingresá un email válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Fecha de nacimiento</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" [max]="fechaMaxima" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+      <mat-error *ngIf="form.controls.fechaNacimiento.hasError('required')">La fecha de nacimiento es obligatoria.</mat-error>
+      <mat-error *ngIf="form.controls.fechaNacimiento.hasError('fechaFutura')">La fecha no puede ser futura.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Obra social (opcional)</mat-label>
+      <input matInput formControlName="obraSocial" placeholder="OSDE, Swiss Medical, Particular..." />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Dirección (opcional)</mat-label>
+      <input matInput formControlName="direccion" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Notas (opcional)</mat-label>
+      <textarea matInput formControlName="notas" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="guardar()">
+    {{ esEdicion ? 'Guardar cambios' : 'Crear paciente' }}
+  </button>
+</mat-dialog-actions>

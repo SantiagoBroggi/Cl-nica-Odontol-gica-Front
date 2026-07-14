@@ -1,0 +1,64 @@
+<header class="flex h-16 items-center justify-between border-b border-surface-border bg-white px-6">
+  <!-- Espacio reservado para título de sección / breadcrumb (se completa por módulo) -->
+  <div class="flex items-center gap-2">
+    <button type="button" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100 lg:hidden" aria-label="Abrir menú">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+    <h1 class="text-base font-semibold text-slate-800">Panel de gestión</h1>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <!-- Notificaciones -->
+    <button
+      type="button"
+      class="relative rounded-full p-2 text-slate-500 hover:bg-slate-100"
+      [matMenuTriggerFor]="notifMenu"
+      aria-label="Ver notificaciones"
+    >
+      <span
+        class="material-symbols-outlined"
+        [matBadge]="notificaciones()"
+        [matBadgeHidden]="notificaciones() === 0"
+        matBadgeColor="warn"
+        matBadgeSize="small"
+      >notifications</span>
+    </button>
+    <mat-menu #notifMenu="matMenu">
+      <div class="px-4 py-2 text-sm text-slate-500">
+        Tenés {{ notificaciones() }} notificaciones sin leer.
+      </div>
+    </mat-menu>
+
+    <div class="h-8 w-px bg-surface-border"></div>
+
+    <!-- Usuario conectado -->
+    <button
+      type="button"
+      class="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-slate-100"
+      [matMenuTriggerFor]="userMenu"
+    >
+      <div class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700">
+        {{ usuario().iniciales }}
+      </div>
+      <div class="hidden text-left leading-tight sm:block">
+        <p class="text-sm font-medium text-slate-800">{{ usuario().nombreCompleto }}</p>
+        <p class="text-xs text-slate-500">{{ rolLabel() }}</p>
+      </div>
+      <span class="material-symbols-outlined text-slate-400">expand_more</span>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <span class="material-symbols-outlined align-middle mr-2 text-[18px]">person</span>
+        Mi perfil
+      </button>
+      <button mat-menu-item>
+        <span class="material-symbols-outlined align-middle mr-2 text-[18px]">settings</span>
+        Configuración
+      </button>
+      <button mat-menu-item>
+        <span class="material-symbols-outlined align-middle mr-2 text-[18px]">logout</span>
+        Cerrar sesión
+      </button>
+    </mat-menu>
+  </div>
+</header>
