@@ -1,0 +1,45 @@
+<h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+  Antecedentes médicos de {{ data.pacienteNombre }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Alergias</mat-label>
+      <input matInput formControlName="alergias" placeholder="Ej: Penicilina, ninguna conocida..." />
+      <mat-error *ngIf="form.controls.alergias.hasError('required')">Este campo es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Medicación actual</mat-label>
+      <input matInput formControlName="medicacionActual" placeholder="Ej: Ninguna" />
+      <mat-error *ngIf="form.controls.medicacionActual.hasError('required')">Este campo es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Enfermedades preexistentes</mat-label>
+      <input matInput formControlName="enfermedadesPreexistentes" placeholder="Ej: Hipertensión, diabetes..." />
+      <mat-error *ngIf="form.controls.enfermedadesPreexistentes.hasError('required')">Este campo es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Cirugías previas (opcional)</mat-label>
+      <input matInput formControlName="cirugiasPrevias" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Hábitos (opcional)</mat-label>
+      <input matInput formControlName="habitos" placeholder="Ej: Fumador, no fuma..." />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Observaciones (opcional)</mat-label>
+      <textarea matInput formControlName="observaciones" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,34 @@
+<div class="flex flex-col gap-6">
+  <div>
+    <h1 class="text-xl font-semibold text-slate-800">Reportes</h1>
+    <p class="text-sm text-slate-500">Estadísticas generales del consultorio.</p>
+  </div>
+
+  <!-- Tarjetas KPI -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Total de pacientes</span>
+      <span class="text-2xl font-semibold text-slate-800">{{ kpis().totalPacientes }}</span>
+    </div>
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Nuevos este mes</span>
+      <span class="text-2xl font-semibold text-brand-600">{{ kpis().nuevosEsteMes }}</span>
+    </div>
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Ingresos este mes</span>
+      <span class="text-2xl font-semibold text-emerald-600">{{ kpis().ingresosEsteMes | number: '1.0-0' }}</span>
+    </div>
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Turnos este mes</span>
+      <span class="text-2xl font-semibold text-amber-600">{{ kpis().turnosEsteMes }}</span>
+    </div>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+    <app-chart-card [config]="graficoNuevosPacientes()" />
+    <app-chart-card [config]="graficoIngresos()" />
+    <app-chart-card [config]="graficoTratamientosPorEstado()" />
+    <app-chart-card [config]="graficoTurnosPorEstado()" />
+  </div>
+</div>

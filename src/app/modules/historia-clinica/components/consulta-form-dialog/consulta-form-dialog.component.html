@@ -1,0 +1,52 @@
+<h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+  Nueva consulta · {{ data.pacienteNombre }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha" [max]="fechaMaxima" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="form.controls.fecha.hasError('required')">La fecha es obligatoria.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Profesional</mat-label>
+      <mat-select formControlName="profesional">
+        <mat-option *ngFor="let profesional of profesionales" [value]="profesional">{{ profesional }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.controls.profesional.hasError('required')">Seleccioná un profesional.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Motivo de la consulta</mat-label>
+      <input matInput formControlName="motivo" placeholder="Ej: Dolor en pieza 36" />
+      <mat-error *ngIf="form.controls.motivo.hasError('required')">El motivo es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.motivo.hasError('minlength')">Ingresá al menos 3 caracteres.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Diagnóstico</mat-label>
+      <textarea matInput formControlName="diagnostico" rows="2"></textarea>
+      <mat-error *ngIf="form.controls.diagnostico.hasError('required')">El diagnóstico es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Tratamiento realizado</mat-label>
+      <textarea matInput formControlName="tratamientoRealizado" rows="2"></textarea>
+      <mat-error *ngIf="form.controls.tratamientoRealizado.hasError('required')">Este campo es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Notas (opcional)</mat-label>
+      <textarea matInput formControlName="notas" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="guardar()">Registrar consulta</button>
+</mat-dialog-actions>

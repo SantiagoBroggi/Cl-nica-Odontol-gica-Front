@@ -1,0 +1,62 @@
+<ng-container *ngIf="paciente() as p">
+  <div class="flex flex-col gap-6">
+    <!-- Volver -->
+    <a routerLink="/pacientes" class="flex w-fit items-center gap-1 text-xs font-medium text-slate-500 hover:text-brand-600">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Volver a pacientes
+    </a>
+
+    <!-- Encabezado del paciente -->
+    <div class="app-card flex items-center gap-4 p-5">
+      <app-avatar-iniciales [iniciales]="iniciales(p)" [semilla]="p.id" [tamano]="48" />
+      <div>
+        <h1 class="text-lg font-semibold text-slate-800">{{ nombreCompleto(p) }}</h1>
+        <p class="text-sm text-slate-500">Odontograma · Numeración FDI</p>
+      </div>
+    </div>
+
+    <!-- Referencia de colores por estado -->
+    <div class="app-card flex flex-wrap items-center gap-4 p-3">
+      <span class="text-xs font-medium text-slate-500">Estados:</span>
+      <div *ngFor="let entrada of leyendaEstados" class="flex items-center gap-1.5">
+        <span class="h-3 w-3 rounded border border-slate-300" [style.backgroundColor]="entrada[1].colorHex"></span>
+        <span class="text-xs text-slate-600">{{ entrada[1].label }}</span>
+      </div>
+    </div>
+
+    <!-- Gráfico del odontograma -->
+    <div class="app-card flex flex-col items-center gap-8 p-6 sm:p-10">
+      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">Arcada superior</p>
+
+      <div class="flex flex-wrap justify-center gap-2">
+        <ng-container *ngFor="let diente of arcadaSuperior(); let i = index">
+          <div [class.ml-4]="i === 8">
+            <app-diente-svg
+              [numero]="diente.numero"
+              [estado]="diente.estado"
+              (seleccionar)="seleccionarDiente(diente.numero)"
+            />
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="h-px w-full max-w-md bg-surface-border"></div>
+
+      <div class="flex flex-wrap justify-center gap-2">
+        <ng-container *ngFor="let diente of arcadaInferior(); let i = index">
+          <div [class.ml-4]="i === 8">
+            <app-diente-svg
+              [numero]="diente.numero"
+              [estado]="diente.estado"
+              (seleccionar)="seleccionarDiente(diente.numero)"
+            />
+          </div>
+        </ng-container>
+      </div>
+
+      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">Arcada inferior</p>
+    </div>
+
+    <p class="text-center text-xs text-slate-400">Hacé clic en una pieza para ver o cambiar su estado.</p>
+  </div>
+</ng-container>

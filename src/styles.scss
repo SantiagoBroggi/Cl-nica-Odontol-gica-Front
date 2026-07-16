@@ -80,3 +80,12 @@ body {
   border-radius: 0.75rem;
   box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.08);
 }
+
+// Etapa 6
+// Forma simplificada de una pieza dental para el Odontograma (Etapa 6):
+// un rectángulo con las esquinas superiores más redondeadas que las
+// inferiores, para sugerir la silueta de un diente sin dibujar una
+// ilustración anatómica real.
+.tooth-shape {
+  border-radius: 40% 40% 15% 15%;
+}

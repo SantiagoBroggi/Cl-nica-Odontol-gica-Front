@@ -1,0 +1,14 @@
+<button
+  type="button"
+  (click)="seleccionar.emit()"
+  class="group flex flex-col items-center gap-1"
+  [attr.aria-label]="'Pieza ' + numero + ', estado: ' + config.label"
+>
+  <div
+    class="tooth-shape flex h-9 w-8 items-center justify-center border-2 transition-transform group-hover:scale-110 group-hover:shadow-md"
+    [style.backgroundColor]="config.colorHex"
+    [class.border-slate-300]="estado === 'sano'"
+    [class.border-transparent]="estado !== 'sano'"
+  ></div>
+  <span class="text-[10px] font-medium text-slate-500">{{ numero }}</span>
+</button>

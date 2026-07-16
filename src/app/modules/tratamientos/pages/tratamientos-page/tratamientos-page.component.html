@@ -1,0 +1,95 @@
+<div class="flex flex-col gap-6">
+  <!-- Encabezado -->
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-xl font-semibold text-slate-800">Tratamientos</h1>
+      <p class="text-sm text-slate-500">{{ tratamientos().length }} tratamientos registrados.</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="abrirNuevoTratamiento()" class="!flex !items-center !gap-2">
+      <span class="material-symbols-outlined text-[18px]">add</span>
+      Nuevo tratamiento
+    </button>
+  </div>
+
+  <!-- Barra de búsqueda y filtros -->
+  <div class="app-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
+    <mat-form-field appearance="outline" class="w-full sm:max-w-sm" subscriptSizing="dynamic">
+      <mat-label>Buscar por paciente o tratamiento</mat-label>
+      <input matInput (input)="onBuscar($any($event.target).value)" placeholder="Ej: Martina Gómez" />
+      <span matPrefix class="material-symbols-outlined mr-2 text-[18px] text-slate-400">search</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:w-56" subscriptSizing="dynamic">
+      <mat-label>Filtrar por estado</mat-label>
+      <mat-select value="todos" (selectionChange)="onFiltroChange($event.value)">
+        <mat-option value="todos">Todos los estados</mat-option>
+        <mat-option *ngFor="let entrada of estadosDisponibles" [value]="entrada[0]">{{ entrada[1].label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Tabla -->
+  <div class="app-card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[900px] text-left text-sm">
+        <thead>
+          <tr class="border-b border-surface-border bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <th class="px-5 py-3">Paciente</th>
+            <th class="px-5 py-3">Tratamiento</th>
+            <th class="px-5 py-3">Profesional</th>
+            <th class="px-5 py-3">Estado</th>
+            <th class="px-5 py-3">Progreso</th>
+            <th class="px-5 py-3">Costo</th>
+            <th class="px-5 py-3 text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border">
+          <tr *ngFor="let t of tratamientos()" class="hover:bg-slate-50">
+            <td class="px-5 py-3 font-medium text-slate-800">{{ t.pacienteNombre }}</td>
+            <td class="px-5 py-3">
+              <p class="text-slate-800">{{ t.nombre }}</p>
+              <p *ngIf="t.descripcion" class="max-w-xs truncate text-xs text-slate-500">{{ t.descripcion }}</p>
+            </td>
+            <td class="px-5 py-3 text-slate-600">{{ t.profesional }}</td>
+            <td class="px-5 py-3">
+              <span
+                class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium"
+                [class]="estadoConfig[t.estado].claseTexto + ' ' + estadoConfig[t.estado].claseFondo"
+              >
+                {{ estadoConfig[t.estado].label }}
+              </span>
+            </td>
+            <td class="px-5 py-3">
+              <div class="flex items-center gap-2">
+                <div class="h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full rounded-full bg-brand-500" [style.width.%]="calcularProgreso(t)"></div>
+                </div>
+                <span class="text-xs text-slate-500">{{ calcularProgreso(t) }}%</span>
+              </div>
+            </td>
+            <td class="px-5 py-3 text-slate-600">{{ t.costoTotal | number: '1.0-0' }}</td>
+            <td class="px-5 py-3">
+              <div class="flex items-center justify-end gap-1">
+                <button mat-icon-button matTooltip="Ver etapas" (click)="abrirEtapas(t)" aria-label="Ver etapas">
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">checklist</span>
+                </button>
+                <button mat-icon-button matTooltip="Editar tratamiento" (click)="abrirEditarTratamiento(t)" aria-label="Editar tratamiento">
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">edit</span>
+                </button>
+                <button mat-icon-button matTooltip="Eliminar tratamiento" (click)="confirmarEliminar(t)" aria-label="Eliminar tratamiento">
+                  <span class="material-symbols-outlined text-[20px] text-rose-500">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="tratamientos().length === 0">
+            <td colspan="7" class="px-5 py-12 text-center text-sm text-slate-400">
+              No se encontraron tratamientos con los filtros aplicados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

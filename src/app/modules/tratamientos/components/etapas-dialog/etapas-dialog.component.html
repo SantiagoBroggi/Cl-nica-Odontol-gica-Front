@@ -1,0 +1,51 @@
+<ng-container *ngIf="tratamiento() as t">
+  <h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+    Etapas · {{ t.nombre }}
+  </h2>
+
+  <mat-dialog-content>
+    <p class="mb-1 text-xs text-slate-500">{{ t.pacienteNombre }}</p>
+
+    <!-- Barra de progreso -->
+    <div class="mb-4">
+      <div class="mb-1 flex items-center justify-between text-xs text-slate-500">
+        <span>Progreso</span>
+        <span class="font-medium text-slate-700">{{ progreso() }}%</span>
+      </div>
+      <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+        <div class="h-full rounded-full bg-brand-500 transition-all" [style.width.%]="progreso()"></div>
+      </div>
+    </div>
+
+    <!-- Listado de etapas -->
+    <ul class="flex flex-col divide-y divide-surface-border">
+      <li *ngFor="let etapa of t.etapas" class="flex items-center gap-2 py-2">
+        <mat-checkbox [checked]="etapa.completada" (change)="toggleEtapa(etapa.id)"></mat-checkbox>
+        <span class="flex-1 text-sm" [class.text-slate-400]="etapa.completada" [class.line-through]="etapa.completada">
+          {{ etapa.nombre }}
+        </span>
+        <span *ngIf="etapa.fecha" class="text-xs text-slate-400">{{ etapa.fecha | date: 'dd/MM/yyyy' }}</span>
+        <button mat-icon-button type="button" (click)="eliminarEtapa(etapa.id)" aria-label="Eliminar etapa">
+          <span class="material-symbols-outlined text-[18px] text-rose-400">close</span>
+        </button>
+      </li>
+
+      <li *ngIf="t.etapas.length === 0" class="py-6 text-center text-sm text-slate-400">
+        Todavía no hay etapas cargadas.
+      </li>
+    </ul>
+
+    <!-- Agregar etapa nueva -->
+    <div class="mt-4 flex items-start gap-2">
+      <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+        <mat-label>Nueva etapa</mat-label>
+        <input matInput [formControl]="nuevaEtapaControl" placeholder="Ej: Control post-operatorio" (keyup.enter)="agregarEtapa()" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="button" (click)="agregarEtapa()" class="!mt-0.5">Agregar</button>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" type="button" (click)="cerrar()">Cerrar</button>
+  </mat-dialog-actions>
+</ng-container>

@@ -24,12 +24,15 @@ import {
   PacienteFormDialogData,
 } from '../../components/paciente-form-dialog/paciente-form-dialog.component';
 
+import { RouterLink } from '@angular/router';   // 👈 nuevo
+
 @Component({
   selector: 'app-pacientes-list-page',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,   // 👈 nuevo
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,

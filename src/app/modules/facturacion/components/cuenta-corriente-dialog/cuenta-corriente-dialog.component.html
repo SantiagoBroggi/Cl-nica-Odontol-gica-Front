@@ -1,0 +1,91 @@
+<h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+  Cuenta corriente · {{ data.pacienteNombre }}
+</h2>
+
+<mat-dialog-content>
+  <!-- Resumen de saldo -->
+  <div *ngIf="resumen() as r" class="mb-4 grid grid-cols-3 gap-3 rounded-lg bg-slate-50 p-3 text-center">
+    <div>
+      <p class="text-[11px] uppercase tracking-wide text-slate-400">Facturado</p>
+      <p class="text-sm font-semibold text-slate-700">{{ r.totalFacturado | number: '1.0-0' }}</p>
+    </div>
+    <div>
+      <p class="text-[11px] uppercase tracking-wide text-slate-400">Pagado</p>
+      <p class="text-sm font-semibold text-emerald-600">{{ r.totalPagado | number: '1.0-0' }}</p>
+    </div>
+    <div>
+      <p class="text-[11px] uppercase tracking-wide text-slate-400">Saldo</p>
+      <p class="text-sm font-semibold" [class.text-rose-600]="r.saldo > 0" [class.text-emerald-600]="r.saldo <= 0">
+        {{ r.saldo | number: '1.0-0' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Historial de pagos -->
+  <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Historial de pagos</p>
+  <ul class="mb-4 flex max-h-48 flex-col divide-y divide-surface-border overflow-y-auto">
+    <li *ngFor="let pago of pagos()" class="flex items-center gap-2 py-2">
+      <div class="min-w-0 flex-1">
+        <p class="text-sm text-slate-700">
+          {{ pago.monto | number: '1.0-0' }} · {{ pago.fecha | date: 'dd/MM/yyyy' }}
+        </p>
+        <p class="truncate text-xs text-slate-400">
+          {{ pago.tratamientoNombre || 'Pago a cuenta' }}
+          <span *ngIf="pago.notas"> · {{ pago.notas }}</span>
+        </p>
+      </div>
+      <button mat-icon-button type="button" (click)="eliminarPago(pago.id)" aria-label="Eliminar pago">
+        <span class="material-symbols-outlined text-[18px] text-rose-400">close</span>
+      </button>
+    </li>
+
+    <li *ngIf="pagos().length === 0" class="py-4 text-center text-sm text-slate-400">
+      Todavía no se registraron pagos.
+    </li>
+  </ul>
+
+  <!-- Registrar pago nuevo -->
+  <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Registrar pago</p>
+  <form [formGroup]="form" class="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Tratamiento (opcional)</mat-label>
+      <mat-select formControlName="tratamientoId">
+        <mat-option value="">Pago a cuenta (sin tratamiento puntual)</mat-option>
+        <mat-option *ngFor="let t of tratamientos()" [value]="t.id">{{ t.nombre }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Monto</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input matInput type="number" formControlName="monto" min="1" step="1000" />
+      <mat-error *ngIf="form.controls.monto.hasError('required')">El monto es obligatorio.</mat-error>
+      <mat-error *ngIf="form.controls.monto.hasError('min')">El monto debe ser mayor a 0.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Medio de pago</mat-label>
+      <mat-select formControlName="medioPago">
+        <mat-option *ngFor="let medio of mediosPago" [value]="medio[0]">{{ medio[1] }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="form.controls.fecha.hasError('required')">La fecha es obligatoria.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Notas (opcional)</mat-label>
+      <input matInput formControlName="notas" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cerrar()">Cerrar</button>
+  <button mat-flat-button color="primary" type="button" (click)="registrarPago()">Registrar pago</button>
+</mat-dialog-actions>

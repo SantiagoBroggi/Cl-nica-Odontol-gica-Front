@@ -76,18 +76,26 @@
               <div class="flex items-center justify-end gap-1">
                 <button
                   mat-icon-button
-                  matTooltip="Editar paciente"
-                  (click)="abrirEditarPaciente(paciente)"
-                  aria-label="Editar paciente"
+                  matTooltip="Ver historia clínica"
+                  [routerLink]="['/historia-clinica', paciente.id]"
+                  aria-label="Ver historia clínica"
                 >
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">folder_shared</span>
+                </button>
+                <!-- Etapa 6 -->
+                 <button
+                  mat-icon-button
+                  matTooltip="Ver odontograma"
+                  [routerLink]="['/odontograma', paciente.id]"
+                  aria-label="Ver odontograma"
+                >
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">dentistry</span>
+                </button>
+                <!-- Fin etapa 6 -->
+                <button mat-icon-button matTooltip="Editar paciente" (click)="abrirEditarPaciente(paciente)" aria-label="Editar paciente">
                   <span class="material-symbols-outlined text-[20px] text-slate-500">edit</span>
                 </button>
-                <button
-                  mat-icon-button
-                  matTooltip="Eliminar paciente"
-                  (click)="confirmarEliminar(paciente)"
-                  aria-label="Eliminar paciente"
-                >
+                <button mat-icon-button matTooltip="Eliminar paciente" (click)="confirmarEliminar(paciente)" aria-label="Eliminar paciente">
                   <span class="material-symbols-outlined text-[20px] text-rose-500">delete</span>
                 </button>
               </div>

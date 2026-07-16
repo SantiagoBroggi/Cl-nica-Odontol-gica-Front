@@ -44,59 +44,65 @@ export const routes: Routes = [
           import('./modules/turnos/pages/turnos-page/turnos-page.component').then((m) => m.TurnosPageComponent),
         title: 'Agenda · DentalCare Suite',
       },
+      // Etapa 5: Historia Clínica (antecedentes + evolución clínica).
       {
-        // TODO(Etapa 5): reemplazar por historia clínica del paciente.
         path: 'historia-clinica',
-        loadComponent: () => Promise.resolve(PlaceholderPageComponent),
-        data: {
-          titulo: 'Historia Clínica',
-          icono: 'folder_shared',
-          descripcion: 'Antecedentes médicos y evolución clínica del paciente (Etapa 5).',
-        },
+        loadComponent: () =>
+          import(
+            './modules/historia-clinica/pages/historia-clinica-selector-page/historia-clinica-selector-page.component'
+          ).then((m) => m.HistoriaClinicaSelectorPageComponent),
         title: 'Historia Clínica · DentalCare Suite',
       },
       {
-        // TODO(Etapa 7): reemplazar por la gestión de tratamientos.
+        path: 'historia-clinica/:id',
+        loadComponent: () =>
+          import('./modules/historia-clinica/pages/historia-clinica-page/historia-clinica-page.component').then(
+            (m) => m.HistoriaClinicaPageComponent
+          ),
+        title: 'Historia Clínica · DentalCare Suite',
+      },
+      // Etapa 7: Gestión de tratamientos (planificación, seguimiento y etapas).
+      {
         path: 'tratamientos',
-        loadComponent: () => Promise.resolve(PlaceholderPageComponent),
-        data: {
-          titulo: 'Tratamientos',
-          icono: 'medical_services',
-          descripcion: 'Seguimiento de tratamientos, etapas y costos (Etapa 7).',
-        },
+        loadComponent: () =>
+          import('./modules/tratamientos/pages/tratamientos-page/tratamientos-page.component').then(
+            (m) => m.TratamientosPageComponent
+          ),
         title: 'Tratamientos · DentalCare Suite',
       },
+       // Etapa 6: Odontograma (mapa visual de piezas dentales y su estado).
       {
-        // TODO(Etapa 6): reemplazar por el odontograma digital interactivo.
         path: 'odontograma',
-        loadComponent: () => Promise.resolve(PlaceholderPageComponent),
-        data: {
-          titulo: 'Odontograma',
-          icono: 'dentistry',
-          descripcion: 'Representación gráfica dental por paciente (Etapa 6).',
-        },
+        loadComponent: () =>
+          import(
+            './modules/odontograma/pages/odontograma-selector-page/odontograma-selector-page.component'
+          ).then((m) => m.OdontogramaSelectorPageComponent),
         title: 'Odontograma · DentalCare Suite',
       },
       {
-        // TODO(Etapa 8): reemplazar por presupuestos, pagos y deudas.
+        path: 'odontograma/:id',
+        loadComponent: () =>
+          import('./modules/odontograma/pages/odontograma-page/odontograma-page.component').then(
+            (m) => m.OdontogramaPageComponent
+          ),
+        title: 'Odontograma · DentalCare Suite',
+      },
+      // Etapa 8: Facturación (registro de pagos y resumen de cuentas corrientes).
+      {
         path: 'facturacion',
-        loadComponent: () => Promise.resolve(PlaceholderPageComponent),
-        data: {
-          titulo: 'Facturación',
-          icono: 'receipt_long',
-          descripcion: 'Presupuestos, pagos y estado de cuenta de pacientes (Etapa 8).',
-        },
+        loadComponent: () =>
+          import('./modules/facturacion/pages/facturacion-page/facturacion-page.component').then(
+            (m) => m.FacturacionPageComponent
+          ),
         title: 'Facturación · DentalCare Suite',
       },
+      // Etapa 9: Reportes (dashboard estadístico de tendencias y distribuciones).
       {
-        // TODO(Etapa 9): reemplazar por el dashboard estadístico de reportes.
         path: 'reportes',
-        loadComponent: () => Promise.resolve(PlaceholderPageComponent),
-        data: {
-          titulo: 'Reportes',
-          icono: 'monitoring',
-          descripcion: 'Estadísticas de pacientes, ingresos y tratamientos (Etapa 9).',
-        },
+        loadComponent: () =>
+          import('./modules/reportes/pages/reportes-page/reportes-page.component').then(
+            (m) => m.ReportesPageComponent
+          ),
         title: 'Reportes · DentalCare Suite',
       },
       {

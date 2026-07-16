@@ -1,0 +1,122 @@
+<ng-container *ngIf="paciente() as p">
+  <div class="flex flex-col gap-6">
+    <!-- Volver -->
+    <a routerLink="/pacientes" class="flex w-fit items-center gap-1 text-xs font-medium text-slate-500 hover:text-brand-600">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Volver a pacientes
+    </a>
+
+    <!-- Encabezado del paciente -->
+    <div class="app-card flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-4">
+        <app-avatar-iniciales [iniciales]="iniciales(p)" [semilla]="p.id" [tamano]="56" />
+        <div>
+          <h1 class="text-lg font-semibold text-slate-800">{{ nombreCompleto(p) }}</h1>
+          <p class="text-sm text-slate-500">
+            DNI {{ p.dni }} · {{ calcularEdad(p.fechaNacimiento) }} años · {{ p.obraSocial || 'Particular' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-x-6 gap-y-1 text-sm text-slate-600 sm:grid-cols-2">
+        <p class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-slate-400">call</span>
+          {{ p.telefono }}
+        </p>
+        <p *ngIf="p.email" class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-slate-400">mail</span>
+          {{ p.email }}
+        </p>
+        <p *ngIf="p.direccion" class="flex items-center gap-1.5 sm:col-span-2">
+          <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+          {{ p.direccion }}
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+      <!-- Antecedentes médicos -->
+      <div class="app-card flex flex-col gap-4 p-5 xl:col-span-1">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-slate-800">Antecedentes médicos</h2>
+          <button mat-icon-button (click)="abrirEditarAntecedentes()" aria-label="Editar antecedentes médicos">
+            <span class="material-symbols-outlined text-[20px] text-slate-500">edit</span>
+          </button>
+        </div>
+
+        <ng-container *ngIf="antecedentes() as a; else sinAntecedentes">
+          <dl class="flex flex-col gap-3 text-sm">
+            <div>
+              <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Alergias</dt>
+              <dd class="text-slate-700">{{ a.alergias }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Medicación actual</dt>
+              <dd class="text-slate-700">{{ a.medicacionActual }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Enfermedades preexistentes</dt>
+              <dd class="text-slate-700">{{ a.enfermedadesPreexistentes }}</dd>
+            </div>
+            <div *ngIf="a.cirugiasPrevias">
+              <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Cirugías previas</dt>
+              <dd class="text-slate-700">{{ a.cirugiasPrevias }}</dd>
+            </div>
+            <div *ngIf="a.habitos">
+              <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Hábitos</dt>
+              <dd class="text-slate-700">{{ a.habitos }}</dd>
+            </div>
+            <div *ngIf="a.observaciones">
+              <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Observaciones</dt>
+              <dd class="text-slate-700">{{ a.observaciones }}</dd>
+            </div>
+          </dl>
+          <p class="text-[11px] text-slate-400">Actualizado el {{ a.actualizadoEl | date: 'dd/MM/yyyy' }}</p>
+        </ng-container>
+
+        <ng-template #sinAntecedentes>
+          <div class="flex flex-col items-center gap-2 py-8 text-center">
+            <span class="material-symbols-outlined text-3xl text-slate-300">assignment_late</span>
+            <p class="text-sm text-slate-400">Todavía no se cargaron antecedentes médicos.</p>
+            <button mat-flat-button color="primary" (click)="abrirEditarAntecedentes()">Cargar antecedentes</button>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Evolución clínica -->
+      <div class="app-card flex flex-col gap-4 p-5 xl:col-span-2">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-slate-800">Evolución clínica</h2>
+          <button mat-flat-button color="primary" (click)="abrirNuevaConsulta()" class="!flex !items-center !gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            Nueva consulta
+          </button>
+        </div>
+
+        <ul class="flex flex-col">
+          <li *ngFor="let consulta of consultas(); let last = last" class="relative flex gap-3 pb-6 last:pb-0">
+            <span *ngIf="!last" class="absolute left-[15px] top-8 h-[calc(100%-1.5rem)] w-px bg-surface-border"></span>
+
+            <div class="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+              <span class="material-symbols-outlined text-[16px]">medical_information</span>
+            </div>
+
+            <div class="min-w-0 flex-1 pt-0.5">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <p class="font-medium text-slate-800">{{ consulta.motivo }}</p>
+                <p class="text-xs text-slate-400">{{ consulta.fecha | date: 'dd/MM/yyyy' }} · {{ consulta.profesional }}</p>
+              </div>
+              <p class="mt-1 text-sm text-slate-600"><span class="font-medium text-slate-500">Diagnóstico:</span> {{ consulta.diagnostico }}</p>
+              <p class="mt-0.5 text-sm text-slate-600"><span class="font-medium text-slate-500">Tratamiento:</span> {{ consulta.tratamientoRealizado }}</p>
+              <p *ngIf="consulta.notas" class="mt-0.5 text-sm italic text-slate-400">{{ consulta.notas }}</p>
+            </div>
+          </li>
+
+          <li *ngIf="consultas().length === 0" class="py-10 text-center text-sm text-slate-400">
+            Todavía no hay consultas registradas para este paciente.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,26 @@
+<h2 mat-dialog-title class="!text-base !font-semibold !text-slate-800">
+  Pieza dental {{ data.numero }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let entrada of estadosDisponibles" [value]="entrada[0]">
+          {{ entrada[1].label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Notas (opcional)</mat-label>
+      <textarea matInput formControlName="notas" rows="3" placeholder="Ej: Resina compuesta, cara oclusal"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

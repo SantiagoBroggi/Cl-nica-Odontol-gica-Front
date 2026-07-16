@@ -1,0 +1,74 @@
+<div class="flex flex-col gap-6">
+  <div>
+    <h1 class="text-xl font-semibold text-slate-800">Facturación</h1>
+    <p class="text-sm text-slate-500">Cuenta corriente de cada paciente, calculada a partir de sus tratamientos y pagos.</p>
+  </div>
+
+  <!-- Totales generales -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Total facturado</span>
+      <span class="text-2xl font-semibold text-slate-800">{{ totales().totalFacturado | number: '1.0-0' }}</span>
+    </div>
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Total cobrado</span>
+      <span class="text-2xl font-semibold text-emerald-600">{{ totales().totalPagado | number: '1.0-0' }}</span>
+    </div>
+    <div class="app-card flex flex-col gap-1 p-5">
+      <span class="text-sm font-medium text-slate-500">Deuda total</span>
+      <span class="text-2xl font-semibold text-rose-600">{{ totales().deudaTotal | number: '1.0-0' }}</span>
+    </div>
+  </div>
+
+  <!-- Búsqueda -->
+  <mat-form-field appearance="outline" class="w-full sm:max-w-sm" subscriptSizing="dynamic">
+    <mat-label>Buscar paciente</mat-label>
+    <input matInput (input)="onBuscar($any($event.target).value)" placeholder="Ej: Martina Gómez" />
+    <span matPrefix class="material-symbols-outlined mr-2 text-[18px] text-slate-400">search</span>
+  </mat-form-field>
+
+  <!-- Tabla de cuentas corrientes -->
+  <div class="app-card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[640px] text-left text-sm">
+        <thead>
+          <tr class="border-b border-surface-border bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <th class="px-5 py-3">Paciente</th>
+            <th class="px-5 py-3">Facturado</th>
+            <th class="px-5 py-3">Pagado</th>
+            <th class="px-5 py-3">Saldo</th>
+            <th class="px-5 py-3 text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border">
+          <tr *ngFor="let cuenta of cuentas()" class="hover:bg-slate-50">
+            <td class="px-5 py-3 font-medium text-slate-800">{{ cuenta.pacienteNombre }}</td>
+            <td class="px-5 py-3 text-slate-600">{{ cuenta.totalFacturado | number: '1.0-0' }}</td>
+            <td class="px-5 py-3 text-emerald-600">{{ cuenta.totalPagado | number: '1.0-0' }}</td>
+            <td class="px-5 py-3 font-medium" [class.text-rose-600]="cuenta.saldo > 0" [class.text-emerald-600]="cuenta.saldo <= 0">
+              {{ cuenta.saldo | number: '1.0-0' }}
+            </td>
+            <td class="px-5 py-3">
+              <div class="flex items-center justify-end">
+                <button
+                  mat-icon-button
+                  matTooltip="Ver cuenta corriente"
+                  (click)="abrirCuentaCorriente(cuenta)"
+                  aria-label="Ver cuenta corriente"
+                >
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">receipt_long</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="cuentas().length === 0">
+            <td colspan="5" class="px-5 py-12 text-center text-sm text-slate-400">
+              No se encontraron pacientes con tratamientos facturados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
