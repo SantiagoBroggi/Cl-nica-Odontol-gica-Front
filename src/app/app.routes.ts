@@ -2,6 +2,9 @@ import { Routes } from '@angular/router';
 import { ShellComponent } from './core/layout/shell/shell.component';
 import { PlaceholderPageComponent } from './shared/components/placeholder-page/placeholder-page.component';
 
+import { authGuard } from './core/guards/auth.guard';
+import { rolGuard } from './core/guards/rol.guard';
+
 /**
  * Ruteo principal de la aplicación.
  *
@@ -18,8 +21,15 @@ import { PlaceholderPageComponent } from './shared/components/placeholder-page/p
  */
 export const routes: Routes = [
   {
+    path: 'login',
+    loadComponent: () =>
+      import('./core/auth/login-page/login-page.component').then((m) => m.LoginPageComponent),
+    title: 'Ingresar · DentalCare Suite',
+  },
+  {
     path: '',
     component: ShellComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
@@ -70,7 +80,7 @@ export const routes: Routes = [
           ),
         title: 'Tratamientos · DentalCare Suite',
       },
-       // Etapa 6: Odontograma (mapa visual de piezas dentales y su estado).
+      // Etapa 6: Odontograma (mapa visual de piezas dentales y su estado).
       {
         path: 'odontograma',
         loadComponent: () =>
@@ -105,15 +115,15 @@ export const routes: Routes = [
           ),
         title: 'Reportes · DentalCare Suite',
       },
+      // Etapa 10: Gestión de usuarios (alta, baja y edición de cuentas de usuario).
       {
-        // TODO(Etapa 10): reemplazar por la gestión de usuarios y permisos.
         path: 'usuarios',
-        loadComponent: () => Promise.resolve(PlaceholderPageComponent),
-        data: {
-          titulo: 'Usuarios',
-          icono: 'admin_panel_settings',
-          descripcion: 'Administración de usuarios, roles y permisos (Etapa 10).',
-        },
+        loadComponent: () =>
+          import('./modules/usuarios/pages/usuarios-page/usuarios-page.component').then(
+            (m) => m.UsuariosPageComponent
+          ),
+        canActivate: [rolGuard],
+        data: { rolesPermitidos: ['admin'] },
         title: 'Usuarios · DentalCare Suite',
       },
       {

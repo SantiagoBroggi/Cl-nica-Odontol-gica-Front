@@ -1,0 +1,61 @@
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-xl font-semibold text-slate-800">Usuarios</h1>
+      <p class="text-sm text-slate-500">{{ usuarios().length }} usuarios con acceso al sistema.</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="abrirNuevoUsuario()" class="!flex !items-center !gap-2">
+      <span class="material-symbols-outlined text-[18px]">person_add</span>
+      Nuevo usuario
+    </button>
+  </div>
+
+  <div class="app-card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[720px] text-left text-sm">
+        <thead>
+          <tr class="border-b border-surface-border bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <th class="px-5 py-3">Usuario</th>
+            <th class="px-5 py-3">Email</th>
+            <th class="px-5 py-3">Rol</th>
+            <th class="px-5 py-3">Activo</th>
+            <th class="px-5 py-3 text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border">
+          <tr *ngFor="let usuario of usuarios()" class="hover:bg-slate-50">
+            <td class="px-5 py-3">
+              <div class="flex items-center gap-3">
+                <app-avatar-iniciales [iniciales]="inicialesUsuario(usuario)" [semilla]="usuario.id" [tamano]="36" />
+                <span class="font-medium text-slate-800">{{ nombreCompletoUsuario(usuario) }}</span>
+              </div>
+            </td>
+            <td class="px-5 py-3 text-slate-600">{{ usuario.email }}</td>
+            <td class="px-5 py-3">
+              <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                {{ rolLabels[usuario.rol] }}
+              </span>
+            </td>
+            <td class="px-5 py-3">
+              <mat-slide-toggle [checked]="usuario.activo" (change)="toggleActivo(usuario)"></mat-slide-toggle>
+            </td>
+            <td class="px-5 py-3">
+              <div class="flex items-center justify-end gap-1">
+                <button mat-icon-button matTooltip="Editar usuario" (click)="abrirEditarUsuario(usuario)" aria-label="Editar usuario">
+                  <span class="material-symbols-outlined text-[20px] text-slate-500">edit</span>
+                </button>
+                <button mat-icon-button matTooltip="Eliminar usuario" (click)="confirmarEliminar(usuario)" aria-label="Eliminar usuario">
+                  <span class="material-symbols-outlined text-[20px] text-rose-500">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="usuarios().length === 0">
+            <td colspan="5" class="px-5 py-12 text-center text-sm text-slate-400">Todavía no hay usuarios cargados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

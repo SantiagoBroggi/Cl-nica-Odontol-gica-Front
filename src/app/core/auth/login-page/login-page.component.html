@@ -1,0 +1,54 @@
+<div class="flex min-h-screen items-center justify-center bg-surface-light px-4">
+  <div class="w-full max-w-md">
+    <!-- Marca -->
+    <div class="mb-6 flex flex-col items-center gap-2 text-center">
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-800">
+        <span class="material-symbols-outlined text-3xl text-brand-100">dentistry</span>
+      </div>
+      <h1 class="text-lg font-semibold text-slate-800">DentalCare Suite</h1>
+      <p class="text-sm text-slate-500">Ingresá con tu cuenta para continuar</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="app-card p-6">
+      <form [formGroup]="form" class="flex flex-col gap-4" (ngSubmit)="ingresar()">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="tu&#64;dentalcare.com" />
+          <mat-error *ngIf="form.controls.email.hasError('required')">El email es obligatorio.</mat-error>
+          <mat-error *ngIf="form.controls.email.hasError('email')">Ingresá un email válido.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password" />
+          <mat-error *ngIf="form.controls.password.hasError('required')">La contraseña es obligatoria.</mat-error>
+        </mat-form-field>
+
+        <p *ngIf="errorLogin()" class="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">
+          {{ errorLogin() }}
+        </p>
+
+        <button mat-flat-button color="primary" type="submit" class="!h-11 !w-full">Ingresar</button>
+      </form>
+
+      <!-- Accesos rápidos de prueba -->
+      <div class="mt-6 border-t border-surface-border pt-4">
+        <p class="mb-2 text-center text-xs text-slate-400">
+          Proyecto de portfolio sin backend — probá con cualquiera de estas cuentas:
+        </p>
+        <div class="flex flex-col gap-2">
+          <button
+            *ngFor="let cuenta of cuentasDePrueba"
+            type="button"
+            (click)="usarCuentaDePrueba(cuenta.email)"
+            class="flex items-center justify-between rounded-lg border border-surface-border px-3 py-2 text-left text-xs hover:border-brand-300 hover:bg-brand-50"
+          >
+            <span class="font-medium text-slate-700">{{ cuenta.label }}</span>
+            <span class="text-slate-400">{{ cuenta.email }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

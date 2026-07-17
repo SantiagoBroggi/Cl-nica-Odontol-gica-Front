@@ -6,6 +6,8 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { SessionService } from '../../services/session.service';
 import { ROL_LABELS } from '../../models/usuario-sesion.model';
 
+import { AuthService } from '../../auth/auth.service';   // 👈 nuevo import
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -24,4 +26,10 @@ export class NavbarComponent {
   readonly notificaciones = this.session.notificacionesSinLeer;
 
   readonly rolLabel = computed(() => ROL_LABELS[this.usuario().rol]);
+
+  private readonly authService = inject(AuthService);   // 👈 junto a "private readonly session = inject(SessionService);"
+
+  cerrarSesion(): void {                                  // 👈 nuevo método
+    this.authService.cerrarSesion();
+  }
 }

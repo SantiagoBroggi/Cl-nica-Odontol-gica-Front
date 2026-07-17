@@ -4,26 +4,37 @@ import { UsuarioSesion } from '../models/usuario-sesion.model';
 /**
  * Fuente de verdad del usuario autenticado actual.
  *
- * Hoy expone un usuario mock fijo para poder construir la navbar y, más
- * adelante, los guards de permisos, sin esperar a que el backend
- * (FastAPI + JWT) esté disponible. En la Etapa 10 este servicio pasará a
- * hidratarse desde `core/auth/auth.service.ts` tras el login real,
- * manteniendo la misma interfaz pública (`usuarioActual`), por lo que los
- * componentes que ya lo consuman (navbar, guards) no deberían requerir
- * cambios.
+ * Hasta la Etapa 10 exponía un usuario mock fijo, siempre "logueado",
+ * para poder construir la navbar sin esperar al login real. Ahora que
+ * `core/auth/auth.service.ts` existe, arranca sin sesión iniciada
+ * (`estaAutenticado` en `false`) y es `AuthService` quien la completa
+ * tras un login válido, vía `iniciarSesion()`.
  */
 @Injectable({ providedIn: 'root' })
 export class SessionService {
   private readonly _usuarioActual = signal<UsuarioSesion>({
-    id: 'mock-user-1',
-    nombreCompleto: 'Dra. Lucía Fernández',
-    rol: 'odontologo',
-    iniciales: 'LF',
+    id: '',
+    nombreCompleto: '',
+    rol: 'recepcionista',
+    iniciales: '',
   });
+  private readonly _estaAutenticado = signal<boolean>(false);
 
   /** Signal de solo lectura con el usuario conectado. */
   readonly usuarioActual = this._usuarioActual.asReadonly();
 
-  /** Cantidad de notificaciones sin leer (mock, se conectará en Etapa 2/10). */
+  /** Indica si hay una sesión iniciada. La consulta `authGuard` antes de cada navegación. */
+  readonly estaAutenticado = this._estaAutenticado.asReadonly();
+
+  /** Cantidad de notificaciones sin leer (mock, ver Etapa 2). */
   readonly notificacionesSinLeer = signal<number>(3);
+
+  iniciarSesion(usuario: UsuarioSesion): void {
+    this._usuarioActual.set(usuario);
+    this._estaAutenticado.set(true);
+  }
+
+  cerrarSesion(): void {
+    this._estaAutenticado.set(false);
+  }
 }
